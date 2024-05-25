@@ -3,20 +3,33 @@ import time
 import os
 from RPLCD.i2c import CharLCD
 
+# Initialize the LCD with the appropriate settings
 lcd = CharLCD(i2c_expander='PCF8574', address=0x27, port=1, cols=20, rows=4, dotsize=8)
 lcd.clear()
 
 def lcd_display(line1, line2, line3, line4):
-	lcd.clear()
-	lcd.write_string(line1)
-	lcd.cursor_pos = (1, 0)
-	lcd.write_string(line2)
-	lcd.cursor_pos = (2, 0)
-	lcd.write_string(line3)
-	lcd.cursor_pos = (3, 0)
-	lcd.write_string(line4)
+    """
+    Function to display four lines of text on the LCD screen.
+    
+    Parameters:
+    line1 (str): Text for the first line
+    line2 (str): Text for the second line
+    line3 (str): Text for the third line
+    line4 (str): Text for the fourth line
+    """
+    lcd.clear()
+    lcd.write_string(line1)
+    lcd.cursor_pos = (1, 0)
+    lcd.write_string(line2)
+    lcd.cursor_pos = (2, 0)
+    lcd.write_string(line3)
+    lcd.cursor_pos = (3, 0)
+    lcd.write_string(line4)
     
 def hult_intro():
+    """
+    Displays the introductory message for Hultians on the LCD screen.
+    """
     line1 = "Hello Hultians!"
     line2 = "Let's take the text"
     line3 = "adventure game to"
@@ -26,12 +39,10 @@ def hult_intro():
     lcd.clear()
 
 def display_intro():
-    # ascii_art = [
-        # " _                   ",
-        # "|_| |  _  _| _| o __ ",
-        # "| | | (_|(_|(_| | | |",
-        # "                     ",
-    # ]
+    """
+    Displays the introductory graphics and text for the Aladdin Adventure game.
+    """
+    # ASCII art logo
     logo_line_1 = " _                  "
     logo_line_2 = "|_| |  _  _| _| o _ "
     logo_line_3 = "| | | (_|(_|(_| || |"
@@ -40,6 +51,7 @@ def display_intro():
     time.sleep(2)
     lcd.clear()
     
+    # Game introduction text
     intro_line_1 = "Welcome to Aladdin"
     intro_line_2 = "Adventure!"
     intro_line_3 = "Guide Aladdin to"
@@ -48,25 +60,23 @@ def display_intro():
     time.sleep(3)
     lcd.clear()
 
-    # intro_text = [
-        # "Welcome to Aladdin",
-        # "Adventure!",
-        # "Guide Aladdin to",
-        # "rescue Jasmine."
-    # ]
-
-    # print("\n".join(ascii_art))
-    # input("Press Enter to continue...")
-
-    # for line in intro_text:
-        # print(line)
+    # Prompt to start the game
     lcd_display("Press Enter", "to start...", "", "")
     input("Press Enter to start...")
 
 def display_message(message):
+    """
+    Displays a given message in the console.
+
+    Parameters:
+    message (str): The message to display
+    """
     print("\n" + "\n".join(message.split('\n')))
 
 def handle_input():
+    """
+    Main game loop handling user inputs and game state transitions.
+    """
     game_state = {
         'location': 'start',
         'steps': 0
@@ -82,12 +92,12 @@ def handle_input():
                 game_state['location'] = 'marketplace'
                 game_state['steps'] += 1
             elif choice == '2':
-                lcd_display("Goodbye!", "","","")
+                lcd_display("Goodbye!", "", "", "")
                 print("Goodbye!")
                 break
 
         elif location == 'marketplace':
-            lcd_display("In marketplace.","1: Steal bread", "2: Leave","")
+            lcd_display("In marketplace.", "1: Steal bread", "2: Leave", "")
             display_message("In marketplace.\n1: Steal bread\n2: Leave")
             choice = input()
             if choice == '1':
@@ -98,7 +108,7 @@ def handle_input():
                 game_state['steps'] += 1
 
         elif location == 'guards':
-            lcd_display("IGuards chase you.","1: Run", "2: Fight","")
+            lcd_display("Guards chase you.", "1: Run", "2: Fight", "")
             display_message("Guards chase you.\n1: Run\n2: Fight")
             choice = input()
             if choice == '1':
@@ -109,7 +119,7 @@ def handle_input():
                 game_state['steps'] += 1
 
         elif location == 'jasmine':
-            lcd_display("Meet Jasmine.","1: Talk","2: Ignore","")
+            lcd_display("Meet Jasmine.", "1: Talk", "2: Ignore", "")
             display_message("Meet Jasmine.\n1: Talk\n2: Ignore")
             choice = input()
             if choice == '1':
@@ -120,7 +130,7 @@ def handle_input():
                 game_state['steps'] += 1
 
         elif location == 'cave':
-            lcd_display("Enter cave.","1: Explore","2: Leave","")
+            lcd_display("Enter cave.", "1: Explore", "2: Leave", "")
             display_message("Enter cave.\n1: Explore\n2: Leave")
             choice = input()
             if choice == '1':
@@ -131,7 +141,7 @@ def handle_input():
                 game_state['steps'] += 1
 
         elif location == 'lamp':
-            lcd_display("Find magic lamp.","1: Rub lamp","2: Ignore","")
+            lcd_display("Find magic lamp.", "1: Rub lamp", "2: Ignore", "")
             display_message("Find magic lamp.\n1: Rub lamp\n2: Ignore")
             choice = input()
             if choice == '1':
@@ -142,7 +152,7 @@ def handle_input():
                 game_state['steps'] += 1
 
         elif location == 'genie':
-            lcd_display("Genie appears.","1: Wish","2: No wish","")
+            lcd_display("Genie appears.", "1: Wish", "2: No wish", "")
             display_message("Genie appears.\n1: Wish\n2: No wish")
             choice = input()
             if choice == '1':
@@ -153,7 +163,7 @@ def handle_input():
                 game_state['steps'] += 1
 
         elif location == 'palace':
-            lcd_display("Return to palace.","1: Confront Jafar","2: Avoid","")
+            lcd_display("Return to palace.", "1: Confront Jafar", "2: Avoid", "")
             display_message("Return to palace.\n1: Confront Jafar\n2: Avoid")
             choice = input()
             if choice == '1':
@@ -164,7 +174,7 @@ def handle_input():
                 game_state['steps'] += 1
 
         elif location == 'jafar':
-            lcd_display("Fight Jafar.","1: Use magic","2: Sword","")
+            lcd_display("Fight Jafar.", "1: Use magic", "2: Sword", "")
             display_message("Fight Jafar.\n1: Use magic\n2: Sword")
             choice = input()
             if choice == '1':
@@ -175,11 +185,11 @@ def handle_input():
                 game_state['steps'] += 1
 
         elif location == 'victory':
-            lcd_display("You Win!","Jafar defeated.","1: Quit","1: Restart")
+            lcd_display("You Win!", "Jafar defeated.", "1: Quit", "2: Restart")
             display_message("Jafar defeated!\n1: Quit\n2: Restart")
             choice = input()
             if choice == '1':
-                lcd_display("Well Done Aladdin!", "Goodbye.","","")
+                lcd_display("Well Done Aladdin!", "Goodbye.", "", "")
                 print("Well done Aladdin! Goodbye.\n")
                 break
             elif choice == '2':
@@ -187,7 +197,7 @@ def handle_input():
                 game_state['steps'] = 0
 
         elif location == 'fail':
-            lcd_display("Game Over","1: Restart","","")
+            lcd_display("Game Over", "1: Restart", "", "")
             display_message("Game Over\n1: Restart")
             choice = input()
             if choice == '1':
@@ -195,10 +205,11 @@ def handle_input():
                 game_state['steps'] = 0
 
 if __name__ == '__main__':
-    # display_intro()
-    # handle_input()
-    time.sleep(10)
+    # Pause to ensure the LCD is ready
+    time.sleep(2)
+    # Display the introduction message
     hult_intro()
+    # Display the game introduction
     display_intro()
+    # Start the main game loop
     handle_input()
-    
